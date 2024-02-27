@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuiControl.cs" />
     <Compile Include="MacTable.cs" />
     <Compile Include="Sniffer.cs" />
     <Compile Include="Statistics.cs" />

@@ -14,10 +14,12 @@ namespace PSIP_software_switch
     {
         private Statistics statisticsHandle;
         private Sniffer sniffer;
+        private static MacTable macTableObj;
         public MainWindow()
         {
             InitializeComponent();
             statisticsHandle = new Statistics(this);
+            macTableObj = new MacTable(this);
             sniffer = new Sniffer(this);
         }
 
@@ -43,6 +45,24 @@ namespace PSIP_software_switch
 
         private void button1_Click(object sender, EventArgs e)
         {
+            statisticsHandle.clearTable(1);
+        }
+
+        public void macTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void StatsResetBtn2_Click(object sender, EventArgs e)
+        {
+            statisticsHandle.clearTable(2);
+
+        }
+
+        private void StatsResetBtn1_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("PAPAPPA");
+            statisticsHandle.clearTable(1);
 
         }
     }

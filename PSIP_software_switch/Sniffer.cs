@@ -17,16 +17,20 @@ namespace PSIP_software_switch
         private static int deviceIndex2 = -1;
         private static SharpPcap.CaptureDeviceList devices;
         private int packetCount;
-        private Dictionary<string, int> interfaceToID = new Dictionary<string, int> ();
+        private static Dictionary<string, int> interfaceToID = new Dictionary<string, int> ();
         private static Queue<QueedPacket> packets = new Queue<QueedPacket> ();
         private static bool thredShouldTerminate = false;
+        private static Hashtable macHashTable = new Hashtable ();
         private static readonly object QueueLock = new object ();
 
         public Sniffer(MainWindow _mainWindow) 
         {
             mainWindow = _mainWindow;
             collectDevices();
-       
+            startPacketProcessingThread();
+
+
+
         }
 
         private void collectDevices()
@@ -85,6 +89,10 @@ namespace PSIP_software_switch
             {
                 startSniffing();
             }
+            else
+            {
+                
+            }
 
         }
         private void startSniffing()
@@ -110,7 +118,15 @@ namespace PSIP_software_switch
             var len = e.Data.Length;
             var rawPacket = e.GetPacket();
             var packet = PacketDotNet.Packet.ParsePacket(rawPacket.LinkLayerType, rawPacket.Data);
+            if (packet is EthernetPacket ethPacket)
+            {
+                if (!macHashTable.ContainsKey(ethPacket.SourceHardwareAddress.ToString()))
+                {
+                    macHashTable.Add(ethPacket.SourceHardwareAddress.ToString(), recvDeviceIndex);
 
+                }
+                //MacTable.updateMacTable(ethPacket.SourceHardwareAddress.ToString(), 0);
+            }
             lock (QueueLock)
             {
                 packets.Enqueue(new QueedPacket(recvDeviceIndex, rawPacket));
@@ -118,13 +134,13 @@ namespace PSIP_software_switch
 
             if (recvDeviceIndex == deviceIndex1)
             {
-                Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "IN");
-                devices[sendDeviceIndex].SendPacket(packet);
-                Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
+                // Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+                // devices[sendDeviceIndex].SendPacket(packet);
+                // Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
             }
             else
             {
-                Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+                // Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "IN");
             }
             
         }
@@ -161,13 +177,25 @@ namespace PSIP_software_switch
                     {
                         int sendingDeviceIndex = (packet.deviceIndex == deviceIndex1) ? deviceIndex2 :
                             ((packet.deviceIndex == deviceIndex2) ? deviceIndex1 : -1);
+                        int receivingDevice = (packet.deviceIndex == deviceIndex1) ? deviceIndex1:
+                            ((packet.deviceIndex == deviceIndex2) ? deviceIndex2 : -1);
 
                         if (sendingDeviceIndex == -1)
                         {
                             throw new Exception("Sending device invalid");
                         }
+                        if (macHashTable.ContainsKey(packet.packet.SourceHardwareAddress.ToString()))
+                        {
+                            if ((int)macHashTable[packet.packet.SourceHardwareAddress.ToString()] == receivingDevice)
+                            {
+                                devices[sendingDeviceIndex].SendPacket(packet.packet);
+                                Statistics.updateStatsTable(packet.packet, interfaceToID[devices[packet.deviceIndex].Description], "IN");
 
-                        devices[sendingDeviceIndex].SendPacket(packet.packet);
+                                Statistics.updateStatsTable(packet.packet, interfaceToID[devices[packet.deviceIndex].Description], "OUT");
+                            }
+                        }
+                        
+
                     }
                 }
             }

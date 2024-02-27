@@ -32,10 +32,10 @@ namespace PSIP_software_switch
         private void MainForm_Load(object sender, EventArgs e)
         {
             // Call fillRowsColumns method when the form loads
-            fillRowsColumns(mainWindow.statistics1);
+            fillRowsColumns();
         }
 
-        public void fillRowsColumns(DataGridView dataGridView)
+        public void fillRowsColumns()
         {
             stats1DataTable = new DataTable();
             stats2DataTable = new DataTable();
@@ -189,6 +189,20 @@ namespace PSIP_software_switch
                     }
 
                 }
+            }
+        }
+
+        public void clearTable(int statsTableNum)
+        {
+            DataTable dataTable = (statsTableNum == 1) ? stats1DataTable : stats2DataTable;
+            foreach (DataRow row in dataTable.Rows)
+            {
+                row["IN"] = 0;
+                row["OUT"] = 0;
+
+                Console.WriteLine("Skuska");
+                row.SetField("IN", 0);
+                row.SetField("OUT", 0);
             }
         }
 
