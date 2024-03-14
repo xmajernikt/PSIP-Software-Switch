@@ -20,14 +20,14 @@ namespace PSIP_software_switch
         private static Dictionary<string, int> interfaceToID = new Dictionary<string, int> ();
         private static Queue<QueedPacket> packets = new Queue<QueedPacket> ();
         private static bool thredShouldTerminate = false;
-        private static Hashtable macHashTable = new Hashtable ();
-        private static readonly object QueueLock = new object ();
+        private static Dictionary<string, int> macHashTable = new Dictionary<string, int> ();
+        private static object QueueLock = new object ();
 
         public Sniffer(MainWindow _mainWindow) 
         {
             mainWindow = _mainWindow;
             collectDevices();
-            startPacketProcessingThread();
+            //startPacketProcessingThread();
 
 
 
@@ -52,11 +52,11 @@ namespace PSIP_software_switch
             mainWindow.selectionInterface2.SelectedIndexChanged += SelectionInterface2_ChangeDetected;
         }
 
-        private static void startPacketProcessingThread()
-        {
-            var backroundThread = new System.Threading.Thread(ProcessPackets);
-            backroundThread.Start();
-        }
+        //private static void startPacketProcessingThread()
+        //{
+        //    var backroundThread = new System.Threading.Thread(() => ProcessPackets(ref packets, ref QueueLock, ref thredShouldTerminate));
+        //    backroundThread.Start();
+        //}
 
         private void SelectionInterface1_ChangeDetected(object sender, EventArgs e)
         {
@@ -105,8 +105,8 @@ namespace PSIP_software_switch
             onPacketArrivalCallBackInt1(sender, e, deviceIndex2, deviceIndex1));
             int timeoutMiliseconds = 1000;
 
-            devices[deviceIndex1].Open(mode: DeviceModes.Promiscuous, timeoutMiliseconds);
-            devices[deviceIndex2].Open(mode: DeviceModes.Promiscuous, timeoutMiliseconds);
+            devices[deviceIndex1].Open(mode: DeviceModes.Promiscuous | DeviceModes.NoCaptureLocal | DeviceModes.MaxResponsiveness, timeoutMiliseconds);
+            devices[deviceIndex2].Open(mode: DeviceModes.Promiscuous | DeviceModes.NoCaptureLocal | DeviceModes.MaxResponsiveness, timeoutMiliseconds);
 
             devices[deviceIndex1].StartCapture();
             devices[deviceIndex2].StartCapture();
@@ -120,17 +120,42 @@ namespace PSIP_software_switch
             var packet = PacketDotNet.Packet.ParsePacket(rawPacket.LinkLayerType, rawPacket.Data);
             if (packet is EthernetPacket ethPacket)
             {
-                if (!macHashTable.ContainsKey(ethPacket.SourceHardwareAddress.ToString()))
+                if (macHashTable.ContainsKey(ethPacket.DestinationHardwareAddress.ToString()))
                 {
-                    macHashTable.Add(ethPacket.SourceHardwareAddress.ToString(), recvDeviceIndex);
+                    Console.WriteLine("HAHAHHAHA");
+                    if (macHashTable[ethPacket.DestinationHardwareAddress.ToString()] != recvDeviceIndex)
+                    {
+                        Console.WriteLine("PAPPAPAP");
+                        Console.WriteLine(ethPacket.SourceHardwareAddress.ToString());
+                        Console.WriteLine(recvDeviceIndex);
+                        Console.WriteLine(macHashTable[ethPacket.DestinationHardwareAddress.ToString()]);
+                        Console.WriteLine(devices[macHashTable[ethPacket.DestinationHardwareAddress.ToString()]]);
+                        devices[macHashTable[ethPacket.DestinationHardwareAddress.ToString()]].SendPacket(ethPacket);
+                        Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+
+                        Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
+                        //return;
+                        
+                    }
+                }
+                else if (!macHashTable.ContainsKey(ethPacket.DestinationHardwareAddress.ToString()))
+                {
+                    MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
+                    Console.WriteLine("LALALAL");
+                    Console.WriteLine(ethPacket.SourceHardwareAddress.ToString());
+                    Console.WriteLine(ethPacket.DestinationHardwareAddress.ToString());
+
+                    Console.WriteLine(sendDeviceIndex);
+                    macHashTable[ethPacket.SourceHardwareAddress.ToString()] = recvDeviceIndex;
+                    devices[sendDeviceIndex].SendPacket(ethPacket);
+                    Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+
+                    Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
 
                 }
                 //MacTable.updateMacTable(ethPacket.SourceHardwareAddress.ToString(), 0);
             }
-            lock (QueueLock)
-            {
-                packets.Enqueue(new QueedPacket(recvDeviceIndex, rawPacket));
-            }
+            
 
             if (recvDeviceIndex == deviceIndex1)
             {
@@ -145,58 +170,31 @@ namespace PSIP_software_switch
             
         }
 
-        private static void ProcessPackets()
-        {
-            while (!thredShouldTerminate)
+       
+        
+
+        public static void stopSniffing()
+        {   
+            if (deviceIndex1 != -1 && deviceIndex2 != -1)
             {
-                bool shouldSleep = true;
-
-                lock (QueueLock)
+                if (devices[deviceIndex1] != null && devices[deviceIndex2] != null)
                 {
-                    if (packets.Count > 0)
-                    {
-                        shouldSleep = false;
-                    }
+                    devices[deviceIndex1].StartCapture();
+                    devices[deviceIndex2].StartCapture();
+                    devices[deviceIndex1].Close();
+                    devices[deviceIndex2].Close();
                 }
-
-                if (shouldSleep)
+            }
+            
+            
+        }
+        public void startSniffingMethod()
+        {
+            if (deviceIndex1 != -1 && deviceIndex2 != -1)
+            {
+                if (devices[deviceIndex1] != null && devices[deviceIndex2] != null)
                 {
-                    System.Threading.Thread.Sleep(100);
-                }
-                else
-                {
-                    Queue<QueedPacket> tempPackets = new Queue<QueedPacket>();
-
-                    lock (QueueLock)
-                    {
-                        tempPackets = packets;
-                        packets = new Queue<QueedPacket> ();
-                    }
-
-                    foreach (QueedPacket packet in tempPackets)
-                    {
-                        int sendingDeviceIndex = (packet.deviceIndex == deviceIndex1) ? deviceIndex2 :
-                            ((packet.deviceIndex == deviceIndex2) ? deviceIndex1 : -1);
-                        int receivingDevice = (packet.deviceIndex == deviceIndex1) ? deviceIndex1:
-                            ((packet.deviceIndex == deviceIndex2) ? deviceIndex2 : -1);
-
-                        if (sendingDeviceIndex == -1)
-                        {
-                            throw new Exception("Sending device invalid");
-                        }
-                        if (macHashTable.ContainsKey(packet.packet.SourceHardwareAddress.ToString()))
-                        {
-                            if ((int)macHashTable[packet.packet.SourceHardwareAddress.ToString()] == receivingDevice)
-                            {
-                                devices[sendingDeviceIndex].SendPacket(packet.packet);
-                                Statistics.updateStatsTable(packet.packet, interfaceToID[devices[packet.deviceIndex].Description], "IN");
-
-                                Statistics.updateStatsTable(packet.packet, interfaceToID[devices[packet.deviceIndex].Description], "OUT");
-                            }
-                        }
-                        
-
-                    }
+                    startSniffing();
                 }
             }
         }

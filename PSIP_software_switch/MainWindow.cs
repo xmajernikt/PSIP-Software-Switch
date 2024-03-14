@@ -61,9 +61,24 @@ namespace PSIP_software_switch
 
         private void StatsResetBtn1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("PAPAPPA");
             statisticsHandle.clearTable(1);
 
+        }
+
+        private void StatsResetBtn2_Click_1(object sender, EventArgs e)
+        {
+            statisticsHandle.clearTable(2);
+
+        }
+
+        private void stopConnection_Click(object sender, EventArgs e)
+        {
+            sniffer.startSniffingMethod();
+        }
+
+        private void startConnection_Click(object sender, EventArgs e)
+        {
+            sniffer.startSniffingMethod();
         }
     }
 }
