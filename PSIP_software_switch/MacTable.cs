@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PacketDotNet;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +12,9 @@ namespace PSIP_software_switch
 {
     internal class MacTable
     {
-        private static Dictionary<string, int> macHashTable = new Dictionary<string, int>();
+        public static Dictionary<string, int> macHashTable = new Dictionary<string, int>();
         private static MainWindow mainWindow;
-        private static readonly Object lockObject = new Object();
+        public static readonly Object lockObject = new Object();
         private static DataTable macTable;
         private Timer timer;
 
@@ -44,6 +45,7 @@ namespace PSIP_software_switch
         {
             if (macTable.Rows != null) 
             {
+                List<DataRow> rowsToDelete = new List<DataRow>();
                 foreach (DataRow row in macTable.Rows)
                 {
                     int time = Convert.ToInt32(row["TIME"]);
@@ -54,10 +56,15 @@ namespace PSIP_software_switch
                     else
                     {
                         // Delete the row if time is zero
-                        macHashTable.Remove(Convert.ToString(row["MAC"]));
-                        macTable.Rows.Remove(row);
+                        rowsToDelete.Add(row);
                         break; // Exit the loop after removing the row
                     }
+                }
+
+                foreach (DataRow row in rowsToDelete)
+                {
+                    macHashTable.Remove(Convert.ToString(row["MAC"]));
+                    macTable.Rows.Remove(row);
                 }
             }
             
@@ -86,7 +93,7 @@ namespace PSIP_software_switch
 
         public static void addRow(string macAddress, int portIndex)
         {
-            if (!macHashTable.ContainsKey(FormatMac(macAddress))) 
+            if (!inMacTable(macAddress)) 
             {
                 Console.WriteLine("OOOOOOOOOOOOOOOOOOOO");
                 DataRow newRow = macTable.NewRow();
@@ -126,6 +133,22 @@ namespace PSIP_software_switch
             }
 
             return formattedString.ToString();
+        }
+
+        public static bool inMacTable(string macAddress)
+        {
+            Console.WriteLine(FormatMac(macAddress));
+            if (FormatMac(macAddress) == "FF-FF-FF-FF-FF-FF")
+            {
+                Console.WriteLine("BROADCAST");
+                return false;
+            }
+
+            if (!macHashTable.ContainsKey(FormatMac(macAddress)))
+            {
+                return false;
+            }
+            return true;
         }
 
     }

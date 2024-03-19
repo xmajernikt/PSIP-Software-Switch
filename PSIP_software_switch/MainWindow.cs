@@ -73,12 +73,17 @@ namespace PSIP_software_switch
 
         private void stopConnection_Click(object sender, EventArgs e)
         {
-            sniffer.startSniffingMethod();
+            Sniffer.stopSniffing();
         }
 
         private void startConnection_Click(object sender, EventArgs e)
         {
             sniffer.startSniffingMethod();
+        }
+
+        private void statistics1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
