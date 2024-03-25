@@ -9,6 +9,9 @@ using System.Collections;
 using System.Data.Common;
 using System.Windows.Forms;
 using System.Threading;
+using System.Timers;
+using System.Drawing;
+
 
 namespace PSIP_software_switch
 {
@@ -24,15 +27,19 @@ namespace PSIP_software_switch
         private static Queue<QueedPacket> packets = new Queue<QueedPacket>();
         private static bool thredShouldTerminate = false;
         private static Dictionary<string, int> macHashTable = new Dictionary<string, int>();
+        private static Dictionary<int, int> portToDevIndex = new Dictionary<int, int>();
         private static object QueueLock = new object();
         private static Thread backroundThread;
+        public static DateTime packetArrivalTimeDev1;
+        public static DateTime packetArrivalTimeDev2;
+        private System.Windows.Forms.Timer timer;
+
 
         public Sniffer(MainWindow _mainWindow)
         {
             mainWindow = _mainWindow;
             collectDevices();
-            startPacketProcessingThread();
-
+            
 
 
         }
@@ -50,7 +57,6 @@ namespace PSIP_software_switch
                 mainWindow.selectionInterface2.Items.Add(device.Description);
             }
 
-            Console.WriteLine(deviceIndex1 = mainWindow.selectionInterface1.SelectedIndex);
 
             mainWindow.selectionInterface1.SelectedIndexChanged += SelectionInterface1_ChangeDetected;
             mainWindow.selectionInterface2.SelectedIndexChanged += SelectionInterface2_ChangeDetected;
@@ -65,55 +71,59 @@ namespace PSIP_software_switch
         private void SelectionInterface1_ChangeDetected(object sender, EventArgs e)
         {
             deviceIndex1 = mainWindow.selectionInterface1.SelectedIndex;
+            mainWindow.interface1ConnectionLabel.ForeColor = Color.OrangeRed;
+            mainWindow.interface1ConnectionLabel.Text = "Connected";
             if (interfaceToID.ContainsKey(devices[deviceIndex1].Description))
             {
                 interfaceToID.Remove(devices[deviceIndex1].Description);
             }
             openDevices.Add(deviceIndex1);
             interfaceToID[devices[deviceIndex1].Description] = 1;
-            if (deviceIndex1 != -1 && deviceIndex2 != -1)
-            {
-
-                startSniffing();
-            }
-
+            //portToDevIndex[1] = deviceIndex2;
+           
         }
 
         private void SelectionInterface2_ChangeDetected(object sender, EventArgs e)
         {
             deviceIndex2 = mainWindow.selectionInterface2.SelectedIndex;
-
+            mainWindow.interface2ConnectionLabel.ForeColor = Color.OrangeRed;
+            mainWindow.interface2ConnectionLabel.Text = "Connected";
             if (interfaceToID.ContainsKey(devices[deviceIndex2].Description))
             {
                 interfaceToID.Remove(devices[deviceIndex2].Description);
             }
             interfaceToID[devices[deviceIndex2].Description] = 2;
+            //portToDevIndex[2] = deviceIndex1;
             openDevices.Add(deviceIndex2);
-            if (deviceIndex1 != -1 && deviceIndex2 != -1)
-            {
-                startSniffing();
-            }
-            else
-            {
-
-            }
+            
+            
 
         }
         private void startSniffing()
         {
+            startPacketProcessingThread();
             // deviceIndex2 = mainWindow.selectionInterface2.SelectedIndex;
+            if (deviceIndex1 != -1 && deviceIndex2 != -1)
+            {
+                
+                portToDevIndex[1] = deviceIndex2;
+                portToDevIndex[2] = deviceIndex1;
+                devices[deviceIndex1].OnPacketArrival += new PacketArrivalEventHandler((sender, e) =>
+                onPacketArrivalCallBackInt1(sender, e, deviceIndex1, deviceIndex2));
+                devices[deviceIndex2].OnPacketArrival += new PacketArrivalEventHandler((sender, e) =>
+                onPacketArrivalCallBackInt1(sender, e, deviceIndex2, deviceIndex1));
 
-            devices[deviceIndex1].OnPacketArrival += new PacketArrivalEventHandler((sender, e) =>
-            onPacketArrivalCallBackInt1(sender, e, deviceIndex1, deviceIndex2));
-            devices[deviceIndex2].OnPacketArrival += new PacketArrivalEventHandler((sender, e) =>
-            onPacketArrivalCallBackInt1(sender, e, deviceIndex2, deviceIndex1));
-            int timeoutMiliseconds = 1000;
+                int timeoutMiliseconds = 1000;
 
-            devices[deviceIndex1].Open(mode: DeviceModes.Promiscuous | DeviceModes.NoCaptureLocal | DeviceModes.MaxResponsiveness, timeoutMiliseconds);
-            devices[deviceIndex2].Open(mode: DeviceModes.Promiscuous | DeviceModes.NoCaptureLocal | DeviceModes.MaxResponsiveness, timeoutMiliseconds);
+                devices[deviceIndex1].Open(mode: DeviceModes.Promiscuous | DeviceModes.NoCaptureLocal | DeviceModes.MaxResponsiveness);
+                devices[deviceIndex2].Open(mode: DeviceModes.Promiscuous | DeviceModes.NoCaptureLocal | DeviceModes.MaxResponsiveness);
 
-            devices[deviceIndex1].StartCapture();
-            devices[deviceIndex2].StartCapture();
+                devices[deviceIndex1].StartCapture();
+                devices[deviceIndex2].StartCapture();
+            }
+            
+            //startTimer();
+
         }
 
         private void onPacketArrivalCallBackInt1(object sender, PacketCapture e, int recvDeviceIndex, int sendDeviceIndex)
@@ -122,56 +132,32 @@ namespace PSIP_software_switch
             var len = e.Data.Length;
             var rawPacket = e.GetPacket();
             var packet = PacketDotNet.Packet.ParsePacket(rawPacket.LinkLayerType, rawPacket.Data);
-            if (packet is EthernetPacket ethPacket)
+            
+
+            if (interfaceToID[devices[recvDeviceIndex].Description] == 1)
             {
-                MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
-                packets.Enqueue(new QueedPacket(recvDeviceIndex, rawPacket));
-
-                //if (macHashTable.ContainsKey(ethPacket.DestinationHardwareAddress.ToString()))
-                //{
-                //    Console.WriteLine("HAHAHHAHA");
-                //    if (macHashTable[ethPacket.DestinationHardwareAddress.ToString()] != recvDeviceIndex)
-                //    {
-                //        Console.WriteLine("PAPPAPAP");
-                //        Console.WriteLine(ethPacket.SourceHardwareAddress.ToString());
-                //        Console.WriteLine(recvDeviceIndex);
-                //        Console.WriteLine(macHashTable[ethPacket.DestinationHardwareAddress.ToString()]);
-                //        Console.WriteLine(devices[macHashTable[ethPacket.DestinationHardwareAddress.ToString()]]);
-                //        devices[macHashTable[ethPacket.DestinationHardwareAddress.ToString()]].SendPacket(ethPacket);
-                //        Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
-
-                //        Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
-                //        //return;
-
-                //    }
-                //}
-                //else if (!macHashTable.ContainsKey(ethPacket.DestinationHardwareAddress.ToString()))
-                //{
-                //    MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
-                //    Console.WriteLine("LALALAL");
-                //    Console.WriteLine(ethPacket.SourceHardwareAddress.ToString());
-                //    Console.WriteLine(ethPacket.DestinationHardwareAddress.ToString());
-
-                //    Console.WriteLine(sendDeviceIndex);
-                //    macHashTable[ethPacket.SourceHardwareAddress.ToString()] = recvDeviceIndex;
-                //    devices[sendDeviceIndex].SendPacket(ethPacket);
-                //    Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
-
-                //    Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
-
-                //}
-            }
-
-
-            if (recvDeviceIndex == deviceIndex1)
-            {
-                // Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "IN");
-                // devices[sendDeviceIndex].SendPacket(packet);
-                // Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "OUT");
+                packetArrivalTimeDev1 = DateTime.UtcNow;
             }
             else
             {
-                // Statistics.updateStatsTable(packet, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+                packetArrivalTimeDev2 = DateTime.UtcNow;
+            }
+
+
+            if (packet is EthernetPacket ethPacket)
+            {
+
+                
+                lock (QueueLock)
+                {
+                    packets.Enqueue(new QueedPacket(recvDeviceIndex, rawPacket));
+
+                }
+                Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+
+                MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
+                
+
             }
 
         }
@@ -181,7 +167,7 @@ namespace PSIP_software_switch
             while (!shouldTermiante)
             {
                 bool shouldSleep = true;
-                bool isInMac = false;
+                
                 lock (QueueLockObj)
                 {
                     if (capturedPackets.Count > 0)
@@ -210,38 +196,71 @@ namespace PSIP_software_switch
                             ((packet.deviceIndex == deviceIndex2) ? deviceIndex1 : -1);
                         int receivingDeviceIndex = (packet.deviceIndex == deviceIndex1) ? deviceIndex1 :
                             ((packet.deviceIndex == deviceIndex2) ? deviceIndex2 : -1);
-
+                        bool isInMac = false;
                         if (sendingDeviceIndex == -1)
                         {
                             throw new Exception("Sending device invalid");
                         }
                         isInMac = MacTable.inMacTable(packet.packet.DestinationHardwareAddress.ToString());
-                        if (isInMac)
+                        
+                        int macTablePort = MacTable.GetRecordPort(packet.packet.SourceHardwareAddress.ToString());
+
+                        if (macTablePort != 0)
                         {
+                            Console.WriteLine($"SOURCE MAC ADDRESS: {packet.packet.SourceHardwareAddress} PORT: {interfaceToID[devices[packet.deviceIndex].Description]}" );
+                            Console.WriteLine($"Interface port {macTablePort}");
+                            if (macTablePort != interfaceToID[devices[packet.deviceIndex].Description])
+                            {
+                                MacTable.CableSwitch(packet.packet.SourceHardwareAddress.ToString(), 0, 0);
+                                
+                                //SwitchPortMapping();
+                                
+                            }
+                        }
 
-                            devices[sendingDeviceIndex].SendPacket(packet.packet);
+                        if (isInMac && packet.deviceIndex == sendingDeviceIndex)
+                        {
+                            MacTable.updateTime(packet.packet.SourceHardwareAddress.ToString());
 
+                            int toSend;
+                            lock (MacTable.lockObject)
+                            {
+                                 toSend = portToDevIndex[MacTable.macHashTable[MacTable.FormatMac(packet.packet.DestinationHardwareAddress.ToString())]];
+
+                            }
+                            Console.WriteLine(MacTable.macHashTable[MacTable.FormatMac(packet.packet.DestinationHardwareAddress.ToString())]);
+                            Console.WriteLine(toSend);
+                            try
+                            {
+                                
+                                devices[toSend].SendPacket(packet.packet);
+                                //devices[sendingDeviceIndex].SendPacket(packet.packet);
+
+
+                            }
+                            catch (Exception e) { }
 
                         }
                         else
                         {
+                            MacTable.updateTime(packet.packet.SourceHardwareAddress.ToString());
                             foreach (int devInd in openDevices)
                             {
-                                if (devInd == packet.deviceIndex)
+                                if (devInd != packet.deviceIndex)
                                 {
-                                    continue;
+                                    try
+                                    {
+                                        
+                                        devices[devInd].SendPacket(packet.packet);
+                                    }
+                                    catch (Exception ex) { }
                                 }
 
-                                try
-                                {
-                                    devices[devInd].SendPacket(packet.packet); break;
-                                }
-                                catch (Exception ex) { }
+                                
                             }
                         }
-                        Statistics.updateStatsTable(packet.packet, interfaceToID[devices[packet.deviceIndex].Description], "IN");
 
-                        Statistics.updateStatsTable(packet.packet, interfaceToID[devices[packet.deviceIndex].Description], "OUT");
+                        Statistics.updateStatsTable(packet.packet, interfaceToID[devices[sendingDeviceIndex].Description], "OUT");
 
 
 
@@ -252,7 +271,7 @@ namespace PSIP_software_switch
         }
 
 
-            public static void stopSniffing()
+        public static void stopSniffing()
         {
             if (deviceIndex1 != -1 && deviceIndex2 != -1)
             {
@@ -275,6 +294,7 @@ namespace PSIP_software_switch
             {
                 if (devices[deviceIndex1] != null && devices[deviceIndex2] != null)
                 {
+                    thredShouldTerminate = false;
                     startSniffing();
                 }
             }
@@ -300,5 +320,76 @@ namespace PSIP_software_switch
             }
         }
 
+
+        public void CheckTime(object sender, EventArgs e)
+        {
+            // Define the interval for checking in milliseconds (e.g., every 2 seconds)
+           
+            DateTime currentTime = DateTime.UtcNow;
+            double dev1TimeDifference = (currentTime - packetArrivalTimeDev1).TotalSeconds ;
+            double dev2TimeDifference = (currentTime - packetArrivalTimeDev2).TotalSeconds;
+            Console.WriteLine(dev1TimeDifference);
+            Console.WriteLine(currentTime);
+            Console.WriteLine(packetArrivalTimeDev1);
+            if (dev1TimeDifference > 7)
+            {
+                devices[deviceIndex1].StopCapture();
+                devices[deviceIndex1].Close();
+                Console.WriteLine("Timeout");
+
+            }
+            if (dev2TimeDifference > 7)
+            {
+                devices[deviceIndex2].StopCapture();
+                devices[deviceIndex2].Close();
+                Console.WriteLine("Timeout");
+            }
+
+            // Wait for the specified interval before checking again
+            
+        }
+
+        public static void SwitchPortMapping()
+        {
+            Console.WriteLine("LEKS");
+            foreach (string key in interfaceToID.Keys)
+            {
+                Console.WriteLine(interfaceToID[key]);
+            }
+
+            int swappedPort1 = interfaceToID[devices[deviceIndex1].Description] == 1 ? 2 : 1;
+            int swappedPort2 = interfaceToID[devices[deviceIndex2].Description] == 2 ? 1 : 2;
+
+            interfaceToID[devices[deviceIndex1].Description] = swappedPort1;
+            interfaceToID[devices[deviceIndex2].Description] = swappedPort2;
+
+            Console.WriteLine("KEKS");
+            foreach (string key in interfaceToID.Keys)
+            {
+                Console.WriteLine(interfaceToID[key]);
+            }
+
+         
+
+        }
+
+        private void startTimer()
+        {
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 700; // 1 second
+            timer.Tick += CheckTime;
+            timer.Start();
+        }
+
+        public static void ClearBuffer()
+        {
+            if (packets != null)
+            {
+                packets.Clear();
+            }
+        }
     }
+
 }
+
+

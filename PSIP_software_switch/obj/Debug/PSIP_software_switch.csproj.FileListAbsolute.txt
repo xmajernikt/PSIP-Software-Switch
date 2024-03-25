@@ -119,3 +119,4 @@ C:\Users\admin\source\repos\PSIP_software_switch\PSIP_software_switch\obj\Debug\
 C:\Users\admin\source\repos\PSIP_software_switch\PSIP_software_switch\obj\Debug\PSIP_sof.21983519.Up2Date
 C:\Users\admin\source\repos\PSIP_software_switch\PSIP_software_switch\obj\Debug\PSIP_software_switch.exe
 C:\Users\admin\source\repos\PSIP_software_switch\PSIP_software_switch\obj\Debug\PSIP_software_switch.pdb
+C:\Users\admin\source\repos\PSIP_software_switch\PSIP_software_switch\obj\Debug\PSIP_software_switch.AclFilterForm.resources

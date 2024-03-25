@@ -163,7 +163,7 @@ namespace PSIP_software_switch
                             break;
 
                         case nameof(PacketDotNet.IcmpV4Packet):
-                        case nameof(IcmpV6Packet):
+                        //case nameof(IcmpV6Packet):
                             statsDataTable.Rows[2].SetField(inOut, Convert.ToInt32(statsDataTable.Rows[2][inOut]) + 1);
                             break;
 
