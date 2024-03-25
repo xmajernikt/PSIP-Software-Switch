@@ -30,9 +30,10 @@ namespace PSIP_software_switch
         private static Dictionary<int, int> portToDevIndex = new Dictionary<int, int>();
         private static object QueueLock = new object();
         private static Thread backroundThread;
-        public static DateTime packetArrivalTimeDev1;
-        public static DateTime packetArrivalTimeDev2;
+        public static DateTime packetArrivalTimeDev1 = DateTime.UtcNow;
+        public static DateTime packetArrivalTimeDev2 = DateTime.UtcNow;
         private System.Windows.Forms.Timer timer;
+        private int disconnectTime = 5;
 
 
         public Sniffer(MainWindow _mainWindow)
@@ -72,7 +73,7 @@ namespace PSIP_software_switch
         {
             deviceIndex1 = mainWindow.selectionInterface1.SelectedIndex;
             mainWindow.interface1ConnectionLabel.ForeColor = Color.OrangeRed;
-            mainWindow.interface1ConnectionLabel.Text = "Connected";
+            mainWindow.interface1ConnectionLabel.Text = "Selected";
             if (interfaceToID.ContainsKey(devices[deviceIndex1].Description))
             {
                 interfaceToID.Remove(devices[deviceIndex1].Description);
@@ -87,7 +88,7 @@ namespace PSIP_software_switch
         {
             deviceIndex2 = mainWindow.selectionInterface2.SelectedIndex;
             mainWindow.interface2ConnectionLabel.ForeColor = Color.OrangeRed;
-            mainWindow.interface2ConnectionLabel.Text = "Connected";
+            mainWindow.interface2ConnectionLabel.Text = "Selected";
             if (interfaceToID.ContainsKey(devices[deviceIndex2].Description))
             {
                 interfaceToID.Remove(devices[deviceIndex2].Description);
@@ -120,27 +121,43 @@ namespace PSIP_software_switch
 
                 devices[deviceIndex1].StartCapture();
                 devices[deviceIndex2].StartCapture();
+
+               
             }
             
-            //startTimer();
+            startTimer();
 
         }
 
         private void onPacketArrivalCallBackInt1(object sender, PacketCapture e, int recvDeviceIndex, int sendDeviceIndex)
         {
+           
+           
             var time = e.Header.Timeval.Date;
             var len = e.Data.Length;
             var rawPacket = e.GetPacket();
             var packet = PacketDotNet.Packet.ParsePacket(rawPacket.LinkLayerType, rawPacket.Data);
-            
+
 
             if (interfaceToID[devices[recvDeviceIndex].Description] == 1)
             {
                 packetArrivalTimeDev1 = DateTime.UtcNow;
+
+                mainWindow.Invoke((MethodInvoker)delegate {
+                    // Update UI on the UI thread
+                    mainWindow.interface1ConnectionLabel.ForeColor = Color.Green;
+                    mainWindow.interface1ConnectionLabel.Text = "Connected";
+                });
             }
             else
             {
                 packetArrivalTimeDev2 = DateTime.UtcNow;
+
+                mainWindow.Invoke((MethodInvoker)delegate {
+                    // Update UI on the UI thread
+                    mainWindow.interface2ConnectionLabel.ForeColor = Color.Green;
+                    mainWindow.interface2ConnectionLabel.Text = "Connected";
+                });
             }
 
 
@@ -331,18 +348,26 @@ namespace PSIP_software_switch
             Console.WriteLine(dev1TimeDifference);
             Console.WriteLine(currentTime);
             Console.WriteLine(packetArrivalTimeDev1);
-            if (dev1TimeDifference > 7)
+            Console.WriteLine($"TIME: {disconnectTime}");
+            if (dev1TimeDifference > disconnectTime)
             {
-                devices[deviceIndex1].StopCapture();
-                devices[deviceIndex1].Close();
+                //devices[deviceIndex1].StopCapture();
+                //devices[deviceIndex1].Close();
+                mainWindow.interface1ConnectionLabel.ForeColor = Color.Red;
+                mainWindow.interface1ConnectionLabel.Text = "Disconnected";
+                MacTable.DeleteSpecificRecords(1);
                 Console.WriteLine("Timeout");
 
             }
-            if (dev2TimeDifference > 7)
+            if (dev2TimeDifference > disconnectTime)
             {
-                devices[deviceIndex2].StopCapture();
-                devices[deviceIndex2].Close();
+                //devices[deviceIndex2].StopCapture();
+                //devices[deviceIndex2].Close();
+                mainWindow.interface2ConnectionLabel.ForeColor = Color.Red;
+                mainWindow.interface2ConnectionLabel.Text = "Disconnected";
+                MacTable.DeleteSpecificRecords(2);
                 Console.WriteLine("Timeout");
+                Console.WriteLine("TU JE DRUHY INTERFACE");
             }
 
             // Wait for the specified interval before checking again
@@ -371,6 +396,12 @@ namespace PSIP_software_switch
 
          
 
+        }
+
+        public void SetDisconnectTime(int newTime)
+        {
+            disconnectTime = newTime;
+            
         }
 
         private void startTimer()

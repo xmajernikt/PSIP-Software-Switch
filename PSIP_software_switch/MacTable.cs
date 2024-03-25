@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -136,6 +137,14 @@ namespace PSIP_software_switch
 
         }
 
+        public void DeleteAllRecords()
+        {
+            macHashTable.Clear();
+            macTable.Rows.Clear();
+            macToTime.Clear();
+
+        }
+
         public static string FormatMac(string input)
         {
             if (string.IsNullOrEmpty(input))
@@ -264,7 +273,34 @@ namespace PSIP_software_switch
     
            
         
-        
+        public static void DeleteSpecificRecords(int portNumber)
+        {
+            List<DataRow> dataRows = new List<DataRow>();
+            List<string> macAddresses = new List<string>();
+            if (macTable.Rows.Count > 0)
+            {
+                foreach (DataRow row in macTable.Rows)
+                {
+                    if ((int)row["PORT"] == portNumber)
+                    {
+                        dataRows.Add(row);
+                        macAddresses.Add((string)row["MAC"]);
+                    }
+                }
+
+            }
+
+            foreach (DataRow row in dataRows)
+            {
+                macTable.Rows.Remove(row);
+            }
+
+            foreach (string macAddress in macAddresses)
+            {
+                macHashTable.Remove(macAddress);
+                macToTime.Remove(macAddress);
+            }
+        }
 
         public static int GetRecordPort(string sourceMacAddress)
         {

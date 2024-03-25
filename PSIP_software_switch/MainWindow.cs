@@ -106,7 +106,9 @@ namespace PSIP_software_switch
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-
+            NumericUpDown numericUpDown = (NumericUpDown)sender;
+            int value = (int)numericUpDown2.Value;
+            sniffer.SetDisconnectTime(value);
         }
 
         private void groupBox7_Enter(object sender, EventArgs e)
@@ -132,6 +134,45 @@ namespace PSIP_software_switch
         private void endSniffing_Click(object sender, EventArgs e)
         {
             Sniffer.stopSniffing();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var aclForm = new AclFilterForm();
+            aclForm.ShowDialog();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            macTableObj.DeleteAllRecords();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_Enter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                textBox1.Text = "Enter your text here...";
+                textBox1.ForeColor = SystemColors.GrayText; // Change text color to gray
+            }
+        }
+
+        private void textBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (textBox1.Text == "IP")
+            {
+                textBox1.Text = "";
+                textBox1.ForeColor = SystemColors.WindowText; // Change text color to default
+            }
         }
     }
 }

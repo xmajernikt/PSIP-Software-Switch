@@ -38,7 +38,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.button7 = new System.Windows.Forms.Button();
+            this.createACLRecord = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -131,9 +131,8 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Font = new System.Drawing.Font("Times New Roman", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.panel3.Location = new System.Drawing.Point(0, 0);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1448, 902);
+            this.panel3.Size = new System.Drawing.Size(1086, 734);
             this.panel3.TabIndex = 12;
             // 
             // groupBox2
@@ -141,11 +140,11 @@
             this.groupBox2.BackColor = System.Drawing.Color.Transparent;
             this.groupBox2.Controls.Add(this.panel1);
             this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox2.Location = new System.Drawing.Point(13, 12);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox2.Location = new System.Drawing.Point(10, 10);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(1420, 886);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Size = new System.Drawing.Size(1065, 720);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Switch";
@@ -163,10 +162,9 @@
             this.panel1.Controls.Add(this.groupBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.panel1.Location = new System.Drawing.Point(3, 33);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Location = new System.Drawing.Point(2, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1414, 851);
+            this.panel1.Size = new System.Drawing.Size(1061, 691);
             this.panel1.TabIndex = 12;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -174,47 +172,45 @@
             // 
             this.groupBox8.Controls.Add(this.panel6);
             this.groupBox8.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox8.Location = new System.Drawing.Point(5, 508);
-            this.groupBox8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox8.Location = new System.Drawing.Point(4, 413);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox8.Size = new System.Drawing.Size(1403, 334);
+            this.groupBox8.Size = new System.Drawing.Size(1052, 271);
             this.groupBox8.TabIndex = 17;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "ACL";
             // 
             // panel6
             // 
-            this.panel6.Controls.Add(this.button7);
+            this.panel6.Controls.Add(this.createACLRecord);
             this.panel6.Controls.Add(this.button3);
             this.panel6.Controls.Add(this.button6);
             this.panel6.Controls.Add(this.dataGridView1);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel6.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.panel6.Location = new System.Drawing.Point(4, 27);
-            this.panel6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel6.Location = new System.Drawing.Point(3, 22);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(1395, 303);
+            this.panel6.Size = new System.Drawing.Size(1046, 246);
             this.panel6.TabIndex = 0;
             // 
-            // button7
+            // createACLRecord
             // 
-            this.button7.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button7.Location = new System.Drawing.Point(1077, 263);
-            this.button7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(100, 30);
-            this.button7.TabIndex = 2;
-            this.button7.Text = "Add";
-            this.button7.UseVisualStyleBackColor = true;
+            this.createACLRecord.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.createACLRecord.Location = new System.Drawing.Point(808, 214);
+            this.createACLRecord.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.createACLRecord.Name = "createACLRecord";
+            this.createACLRecord.Size = new System.Drawing.Size(75, 24);
+            this.createACLRecord.TabIndex = 2;
+            this.createACLRecord.Text = "Add";
+            this.createACLRecord.UseVisualStyleBackColor = true;
+            this.createACLRecord.Click += new System.EventHandler(this.button7_Click);
             // 
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button3.Location = new System.Drawing.Point(1289, 263);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button3.Location = new System.Drawing.Point(967, 214);
+            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(100, 30);
+            this.button3.Size = new System.Drawing.Size(75, 24);
             this.button3.TabIndex = 1;
             this.button3.Text = "Delete";
             this.button3.UseVisualStyleBackColor = true;
@@ -222,16 +218,20 @@
             // button6
             // 
             this.button6.Font = new System.Drawing.Font("Times New Roman", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button6.Location = new System.Drawing.Point(1183, 263);
-            this.button6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button6.Location = new System.Drawing.Point(887, 214);
+            this.button6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(100, 30);
+            this.button6.Size = new System.Drawing.Size(75, 24);
             this.button6.TabIndex = 1;
             this.button6.Text = "Modify";
             this.button6.UseVisualStyleBackColor = true;
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -248,13 +248,12 @@
             this.dst_port,
             this.icmp_type,
             this.protocol});
-            this.dataGridView1.Location = new System.Drawing.Point(7, 6);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Location = new System.Drawing.Point(5, 5);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(1383, 251);
+            this.dataGridView1.Size = new System.Drawing.Size(1037, 204);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -367,11 +366,11 @@
             // 
             this.groupBox7.Controls.Add(this.panel7);
             this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox7.Location = new System.Drawing.Point(1172, 110);
-            this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox7.Location = new System.Drawing.Point(879, 89);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox7.Size = new System.Drawing.Size(236, 388);
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox7.Size = new System.Drawing.Size(177, 315);
             this.groupBox7.TabIndex = 16;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Syslog";
@@ -385,19 +384,18 @@
             this.panel7.Controls.Add(this.groupBox9);
             this.panel7.Controls.Add(this.radioButton1);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(3, 25);
-            this.panel7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel7.Location = new System.Drawing.Point(2, 21);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(230, 361);
+            this.panel7.Size = new System.Drawing.Size(173, 292);
             this.panel7.TabIndex = 0;
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button2.Location = new System.Drawing.Point(9, 293);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2.Location = new System.Drawing.Point(7, 238);
+            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(211, 55);
+            this.button2.Size = new System.Drawing.Size(158, 45);
             this.button2.TabIndex = 11;
             this.button2.Text = "Connect";
             this.button2.UseVisualStyleBackColor = true;
@@ -406,10 +404,10 @@
             // 
             this.radioButton2.AutoSize = true;
             this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.radioButton2.Location = new System.Drawing.Point(8, 246);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radioButton2.Location = new System.Drawing.Point(6, 200);
+            this.radioButton2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(109, 24);
+            this.radioButton2.Size = new System.Drawing.Size(93, 21);
             this.radioButton2.TabIndex = 27;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Interface 2";
@@ -420,11 +418,9 @@
             this.groupBox10.Controls.Add(this.textBox6);
             this.groupBox10.Controls.Add(this.textBox7);
             this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox10.Location = new System.Drawing.Point(8, 112);
-            this.groupBox10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox10.Location = new System.Drawing.Point(6, 91);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox10.Size = new System.Drawing.Size(208, 97);
+            this.groupBox10.Size = new System.Drawing.Size(156, 79);
             this.groupBox10.TabIndex = 27;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Server";
@@ -433,10 +429,10 @@
             // 
             this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox6.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox6.Location = new System.Drawing.Point(7, 27);
-            this.textBox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox6.Location = new System.Drawing.Point(5, 22);
+            this.textBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(193, 28);
+            this.textBox6.Size = new System.Drawing.Size(146, 24);
             this.textBox6.TabIndex = 22;
             this.textBox6.Text = "IP";
             // 
@@ -444,10 +440,10 @@
             // 
             this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox7.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox7.Location = new System.Drawing.Point(7, 62);
-            this.textBox7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox7.Location = new System.Drawing.Point(5, 50);
+            this.textBox7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(129, 28);
+            this.textBox7.Size = new System.Drawing.Size(98, 24);
             this.textBox7.TabIndex = 25;
             this.textBox7.Text = "Port";
             // 
@@ -456,11 +452,9 @@
             this.groupBox9.Controls.Add(this.textBox1);
             this.groupBox9.Controls.Add(this.textBox5);
             this.groupBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox9.Location = new System.Drawing.Point(8, 7);
-            this.groupBox9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox9.Location = new System.Drawing.Point(6, 6);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox9.Size = new System.Drawing.Size(208, 97);
+            this.groupBox9.Size = new System.Drawing.Size(156, 79);
             this.groupBox9.TabIndex = 26;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Client";
@@ -469,21 +463,23 @@
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox1.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox1.Location = new System.Drawing.Point(7, 27);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox1.Location = new System.Drawing.Point(5, 22);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(193, 28);
+            this.textBox1.Size = new System.Drawing.Size(146, 24);
             this.textBox1.TabIndex = 22;
             this.textBox1.Text = "IP";
+            this.textBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBox1_MouseClick);
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // textBox5
             // 
             this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox5.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox5.Location = new System.Drawing.Point(7, 62);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox5.Location = new System.Drawing.Point(5, 50);
+            this.textBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(129, 28);
+            this.textBox5.Size = new System.Drawing.Size(98, 24);
             this.textBox5.TabIndex = 25;
             this.textBox5.Text = "Port";
             // 
@@ -491,10 +487,10 @@
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.radioButton1.Location = new System.Drawing.Point(8, 215);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.radioButton1.Location = new System.Drawing.Point(6, 175);
+            this.radioButton1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(109, 24);
+            this.radioButton1.Size = new System.Drawing.Size(93, 21);
             this.radioButton1.TabIndex = 26;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Interface 1";
@@ -504,10 +500,10 @@
             // 
             this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox4.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox4.Location = new System.Drawing.Point(1895, 350);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox4.Location = new System.Drawing.Point(1421, 284);
+            this.textBox4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(68, 28);
+            this.textBox4.Size = new System.Drawing.Size(52, 24);
             this.textBox4.TabIndex = 25;
             this.textBox4.Text = "PORT";
             // 
@@ -516,11 +512,11 @@
             this.groupBox6.Controls.Add(this.endSniffing);
             this.groupBox6.Controls.Add(this.startSwitch);
             this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox6.Location = new System.Drawing.Point(1172, 4);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox6.Location = new System.Drawing.Point(879, 3);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox6.Size = new System.Drawing.Size(236, 100);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Size = new System.Drawing.Size(177, 81);
             this.groupBox6.TabIndex = 15;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Switch control";
@@ -528,10 +524,10 @@
             // endSniffing
             // 
             this.endSniffing.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.endSniffing.Location = new System.Drawing.Point(12, 63);
-            this.endSniffing.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.endSniffing.Location = new System.Drawing.Point(9, 51);
+            this.endSniffing.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.endSniffing.Name = "endSniffing";
-            this.endSniffing.Size = new System.Drawing.Size(207, 32);
+            this.endSniffing.Size = new System.Drawing.Size(155, 26);
             this.endSniffing.TabIndex = 10;
             this.endSniffing.Text = "DISABLE";
             this.endSniffing.UseVisualStyleBackColor = true;
@@ -541,10 +537,10 @@
             // 
             this.startSwitch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.startSwitch.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.startSwitch.Location = new System.Drawing.Point(12, 23);
-            this.startSwitch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.startSwitch.Location = new System.Drawing.Point(9, 19);
+            this.startSwitch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.startSwitch.Name = "startSwitch";
-            this.startSwitch.Size = new System.Drawing.Size(211, 32);
+            this.startSwitch.Size = new System.Drawing.Size(158, 26);
             this.startSwitch.TabIndex = 9;
             this.startSwitch.Text = "ENABLE";
             this.startSwitch.UseVisualStyleBackColor = true;
@@ -554,10 +550,10 @@
             // 
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox3.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.textBox3.Location = new System.Drawing.Point(1895, 316);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBox3.Location = new System.Drawing.Point(1421, 257);
+            this.textBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(68, 28);
+            this.textBox3.Size = new System.Drawing.Size(52, 24);
             this.textBox3.TabIndex = 24;
             this.textBox3.Text = "PORT";
             // 
@@ -570,11 +566,11 @@
             this.groupBox5.Controls.Add(this.label8);
             this.groupBox5.Controls.Add(this.label5);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox5.Location = new System.Drawing.Point(787, 2);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox5.Location = new System.Drawing.Point(590, 2);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox5.Size = new System.Drawing.Size(373, 101);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox5.Size = new System.Drawing.Size(280, 82);
             this.groupBox5.TabIndex = 14;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Interface status";
@@ -583,9 +579,10 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label11.Location = new System.Drawing.Point(256, 53);
+            this.label11.Location = new System.Drawing.Point(192, 43);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(90, 40);
+            this.label11.Size = new System.Drawing.Size(76, 34);
             this.label11.TabIndex = 19;
             this.label11.Text = "Time until \r\ndisconnect";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -593,10 +590,10 @@
             // numericUpDown2
             // 
             this.numericUpDown2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numericUpDown2.Location = new System.Drawing.Point(257, 23);
-            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDown2.Location = new System.Drawing.Point(193, 19);
+            this.numericUpDown2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(93, 26);
+            this.numericUpDown2.Size = new System.Drawing.Size(70, 23);
             this.numericUpDown2.TabIndex = 11;
             this.numericUpDown2.Value = new decimal(new int[] {
             5,
@@ -610,9 +607,10 @@
             this.interface2ConnectionLabel.AutoSize = true;
             this.interface2ConnectionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.interface2ConnectionLabel.ForeColor = System.Drawing.Color.Red;
-            this.interface2ConnectionLabel.Location = new System.Drawing.Point(108, 63);
+            this.interface2ConnectionLabel.Location = new System.Drawing.Point(81, 51);
+            this.interface2ConnectionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.interface2ConnectionLabel.Name = "interface2ConnectionLabel";
-            this.interface2ConnectionLabel.Size = new System.Drawing.Size(124, 20);
+            this.interface2ConnectionLabel.Size = new System.Drawing.Size(106, 17);
             this.interface2ConnectionLabel.TabIndex = 18;
             this.interface2ConnectionLabel.Text = "Disconnected";
             // 
@@ -621,9 +619,10 @@
             this.interface1ConnectionLabel.AutoSize = true;
             this.interface1ConnectionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.interface1ConnectionLabel.ForeColor = System.Drawing.Color.Red;
-            this.interface1ConnectionLabel.Location = new System.Drawing.Point(108, 31);
+            this.interface1ConnectionLabel.Location = new System.Drawing.Point(81, 25);
+            this.interface1ConnectionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.interface1ConnectionLabel.Name = "interface1ConnectionLabel";
-            this.interface1ConnectionLabel.Size = new System.Drawing.Size(124, 20);
+            this.interface1ConnectionLabel.Size = new System.Drawing.Size(106, 17);
             this.interface1ConnectionLabel.TabIndex = 17;
             this.interface1ConnectionLabel.Text = "Disconnected";
             this.interface1ConnectionLabel.Click += new System.EventHandler(this.label9_Click);
@@ -632,9 +631,10 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label8.Location = new System.Drawing.Point(5, 63);
+            this.label8.Location = new System.Drawing.Point(4, 51);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(88, 20);
+            this.label8.Size = new System.Drawing.Size(75, 17);
             this.label8.TabIndex = 17;
             this.label8.Text = "Interface 1";
             // 
@@ -642,9 +642,10 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label5.Location = new System.Drawing.Point(5, 31);
+            this.label5.Location = new System.Drawing.Point(4, 25);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(88, 20);
+            this.label5.Size = new System.Drawing.Size(75, 17);
             this.label5.TabIndex = 17;
             this.label5.Text = "Interface 0";
             // 
@@ -652,11 +653,9 @@
             // 
             this.groupBox4.Controls.Add(this.panel5);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox4.Location = new System.Drawing.Point(787, 110);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox4.Location = new System.Drawing.Point(590, 89);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox4.Size = new System.Drawing.Size(373, 391);
+            this.groupBox4.Size = new System.Drawing.Size(280, 318);
             this.groupBox4.TabIndex = 12;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Mac Table";
@@ -669,29 +668,29 @@
             this.panel5.Controls.Add(this.button1);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.panel5.Location = new System.Drawing.Point(4, 27);
-            this.panel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel5.Location = new System.Drawing.Point(3, 22);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(365, 360);
+            this.panel5.Size = new System.Drawing.Size(274, 293);
             this.panel5.TabIndex = 0;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(3, 319);
+            this.label6.Location = new System.Drawing.Point(2, 259);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(74, 20);
+            this.label6.Size = new System.Drawing.Size(63, 17);
             this.label6.TabIndex = 7;
             this.label6.Text = "Timeout:";
             // 
             // numericUpDown1
             // 
             this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numericUpDown1.Location = new System.Drawing.Point(92, 318);
-            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.numericUpDown1.Location = new System.Drawing.Point(69, 258);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(76, 26);
+            this.numericUpDown1.Size = new System.Drawing.Size(57, 23);
             this.numericUpDown1.TabIndex = 10;
             this.numericUpDown1.Value = new decimal(new int[] {
             30,
@@ -702,6 +701,8 @@
             // 
             // macTable
             // 
+            this.macTable.AllowUserToAddRows = false;
+            this.macTable.AllowUserToDeleteRows = false;
             this.macTable.AllowUserToResizeColumns = false;
             this.macTable.AllowUserToResizeRows = false;
             this.macTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -716,35 +717,35 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.macTable.DefaultCellStyle = dataGridViewCellStyle1;
-            this.macTable.Location = new System.Drawing.Point(7, 33);
-            this.macTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.macTable.Enabled = false;
+            this.macTable.Location = new System.Drawing.Point(5, 27);
+            this.macTable.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.macTable.Name = "macTable";
             this.macTable.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.macTable.RowTemplate.Height = 24;
             this.macTable.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.macTable.Size = new System.Drawing.Size(353, 277);
+            this.macTable.Size = new System.Drawing.Size(265, 225);
             this.macTable.TabIndex = 9;
             // 
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.button1.Location = new System.Drawing.Point(188, 315);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button1.Location = new System.Drawing.Point(141, 256);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(172, 33);
+            this.button1.Size = new System.Drawing.Size(129, 27);
             this.button1.TabIndex = 9;
             this.button1.Text = "Reset Mac Table";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.panel4);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox3.Location = new System.Drawing.Point(5, 110);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Location = new System.Drawing.Point(4, 89);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox3.Size = new System.Drawing.Size(763, 391);
+            this.groupBox3.Size = new System.Drawing.Size(572, 318);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Statistics";
@@ -759,19 +760,19 @@
             this.panel4.Controls.Add(this.StatsResetBtn1);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.panel4.Location = new System.Drawing.Point(4, 27);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel4.Location = new System.Drawing.Point(3, 22);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(755, 360);
+            this.panel4.Size = new System.Drawing.Size(566, 293);
             this.panel4.TabIndex = 0;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.Location = new System.Drawing.Point(384, 6);
+            this.label4.Location = new System.Drawing.Point(288, 5);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 20);
+            this.label4.Size = new System.Drawing.Size(75, 17);
             this.label4.TabIndex = 7;
             this.label4.Text = "Interface 1";
             // 
@@ -790,13 +791,13 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.statistics1.DefaultCellStyle = dataGridViewCellStyle2;
             this.statistics1.Enabled = false;
-            this.statistics1.Location = new System.Drawing.Point(7, 33);
-            this.statistics1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.statistics1.Location = new System.Drawing.Point(5, 27);
+            this.statistics1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.statistics1.Name = "statistics1";
             this.statistics1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.statistics1.RowTemplate.Height = 24;
             this.statistics1.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.statistics1.Size = new System.Drawing.Size(353, 277);
+            this.statistics1.Size = new System.Drawing.Size(265, 225);
             this.statistics1.TabIndex = 0;
             this.statistics1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.statistics1_CellContentClick);
             // 
@@ -816,22 +817,22 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.statistics2.DefaultCellStyle = dataGridViewCellStyle3;
             this.statistics2.Enabled = false;
-            this.statistics2.Location = new System.Drawing.Point(388, 33);
-            this.statistics2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.statistics2.Location = new System.Drawing.Point(291, 27);
+            this.statistics2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.statistics2.Name = "statistics2";
             this.statistics2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.statistics2.RowTemplate.Height = 24;
             this.statistics2.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.statistics2.Size = new System.Drawing.Size(353, 277);
+            this.statistics2.Size = new System.Drawing.Size(265, 225);
             this.statistics2.TabIndex = 1;
             // 
             // StatsResetBtn2
             // 
             this.StatsResetBtn2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.StatsResetBtn2.Location = new System.Drawing.Point(485, 315);
-            this.StatsResetBtn2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.StatsResetBtn2.Location = new System.Drawing.Point(364, 256);
+            this.StatsResetBtn2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.StatsResetBtn2.Name = "StatsResetBtn2";
-            this.StatsResetBtn2.Size = new System.Drawing.Size(151, 32);
+            this.StatsResetBtn2.Size = new System.Drawing.Size(113, 26);
             this.StatsResetBtn2.TabIndex = 8;
             this.StatsResetBtn2.Text = "Reset Statistics";
             this.StatsResetBtn2.UseVisualStyleBackColor = true;
@@ -841,19 +842,20 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(3, 6);
+            this.label3.Location = new System.Drawing.Point(2, 5);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 20);
+            this.label3.Size = new System.Drawing.Size(75, 17);
             this.label3.TabIndex = 7;
             this.label3.Text = "Interface 0";
             // 
             // StatsResetBtn1
             // 
             this.StatsResetBtn1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.StatsResetBtn1.Location = new System.Drawing.Point(104, 315);
-            this.StatsResetBtn1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.StatsResetBtn1.Location = new System.Drawing.Point(78, 256);
+            this.StatsResetBtn1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.StatsResetBtn1.Name = "StatsResetBtn1";
-            this.StatsResetBtn1.Size = new System.Drawing.Size(152, 32);
+            this.StatsResetBtn1.Size = new System.Drawing.Size(114, 26);
             this.StatsResetBtn1.TabIndex = 7;
             this.StatsResetBtn1.Text = "Reset Statistics";
             this.StatsResetBtn1.UseVisualStyleBackColor = true;
@@ -863,11 +865,11 @@
             // 
             this.groupBox1.Controls.Add(this.panel2);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBox1.Location = new System.Drawing.Point(3, 2);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Location = new System.Drawing.Point(2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(765, 101);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Size = new System.Drawing.Size(574, 82);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Interface control";
@@ -880,29 +882,29 @@
             this.panel2.Controls.Add(this.label1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.panel2.Location = new System.Drawing.Point(3, 25);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Location = new System.Drawing.Point(2, 21);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(759, 74);
+            this.panel2.Size = new System.Drawing.Size(570, 59);
             this.panel2.TabIndex = 0;
             // 
             // selectionInterface2
             // 
             this.selectionInterface2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selectionInterface2.FormattingEnabled = true;
-            this.selectionInterface2.Location = new System.Drawing.Point(392, 31);
-            this.selectionInterface2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.selectionInterface2.Location = new System.Drawing.Point(294, 25);
+            this.selectionInterface2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.selectionInterface2.Name = "selectionInterface2";
-            this.selectionInterface2.Size = new System.Drawing.Size(352, 28);
+            this.selectionInterface2.Size = new System.Drawing.Size(265, 24);
             this.selectionInterface2.TabIndex = 6;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(388, 7);
+            this.label2.Location = new System.Drawing.Point(291, 6);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 20);
+            this.label2.Size = new System.Drawing.Size(75, 17);
             this.label2.TabIndex = 3;
             this.label2.Text = "Interface 1";
             // 
@@ -910,32 +912,33 @@
             // 
             this.selectionInterface1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selectionInterface1.FormattingEnabled = true;
-            this.selectionInterface1.Location = new System.Drawing.Point(11, 31);
-            this.selectionInterface1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.selectionInterface1.Location = new System.Drawing.Point(8, 25);
+            this.selectionInterface1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.selectionInterface1.Name = "selectionInterface1";
-            this.selectionInterface1.Size = new System.Drawing.Size(352, 28);
+            this.selectionInterface1.Size = new System.Drawing.Size(265, 24);
             this.selectionInterface1.TabIndex = 4;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(7, 6);
+            this.label1.Location = new System.Drawing.Point(5, 5);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 20);
+            this.label1.Size = new System.Drawing.Size(75, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Interface 0";
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SkyBlue;
-            this.ClientSize = new System.Drawing.Size(1448, 902);
+            this.ClientSize = new System.Drawing.Size(1086, 734);
             this.Controls.Add(this.panel3);
             this.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "MainWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Software Switch";
@@ -1026,7 +1029,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button createACLRecord;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn priority;

@@ -26,5 +26,10 @@ namespace PSIP_software_switch
         {
 
         }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
