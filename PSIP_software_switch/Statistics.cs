@@ -200,7 +200,6 @@ namespace PSIP_software_switch
                 row["IN"] = 0;
                 row["OUT"] = 0;
 
-                Console.WriteLine("Skuska");
                 row.SetField("IN", 0);
                 row.SetField("OUT", 0);
             }

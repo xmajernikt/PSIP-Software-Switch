@@ -17,23 +17,26 @@ namespace PSIP_software_switch
 {
     internal class Sniffer
     {
-        MainWindow mainWindow;
-        private static int deviceIndex1 = -1;
-        private static int deviceIndex2 = -1;
-        private static SharpPcap.CaptureDeviceList devices;
+        static MainWindow mainWindow;
+        public static int deviceIndex1 = -1;
+        public static int deviceIndex2 = -1;
+        public static SharpPcap.CaptureDeviceList devices;
         private int packetCount;
         private static List<int> openDevices = new List<int>();
         private static Dictionary<string, int> interfaceToID = new Dictionary<string, int>();
-        private static Queue<QueedPacket> packets = new Queue<QueedPacket>();
+        public static Queue<QueedPacket> packets = new Queue<QueedPacket>();
         private static bool thredShouldTerminate = false;
         private static Dictionary<string, int> macHashTable = new Dictionary<string, int>();
         private static Dictionary<int, int> portToDevIndex = new Dictionary<int, int>();
-        private static object QueueLock = new object();
+        private static Dictionary<int, string> devIndexToName = new Dictionary<int, string>();
+        public static object QueueLock = new object();
         private static Thread backroundThread;
-        public static DateTime packetArrivalTimeDev1 = DateTime.UtcNow;
-        public static DateTime packetArrivalTimeDev2 = DateTime.UtcNow;
-        private System.Windows.Forms.Timer timer;
+        public static DateTime packetArrivalTimeDev1;
+        public static DateTime packetArrivalTimeDev2;
+        private static System.Windows.Forms.Timer timer;
         private int disconnectTime = 5;
+        private bool isDisconnectedInt1 = true;
+        private bool isDisconnectedInt2 = true;
 
 
         public Sniffer(MainWindow _mainWindow)
@@ -50,7 +53,6 @@ namespace PSIP_software_switch
             devices = CaptureDeviceList.Instance;
 
             packetCount = 0;
-            Console.WriteLine(devices);
 
             foreach (var device in devices)
             {
@@ -63,7 +65,7 @@ namespace PSIP_software_switch
             mainWindow.selectionInterface2.SelectedIndexChanged += SelectionInterface2_ChangeDetected;
         }
 
-        private static void startPacketProcessingThread()
+        private void startPacketProcessingThread()
         {
             backroundThread = new Thread(() => ProcessPackets(ref packets, ref QueueLock, ref thredShouldTerminate));
             backroundThread.Start();
@@ -78,8 +80,15 @@ namespace PSIP_software_switch
             {
                 interfaceToID.Remove(devices[deviceIndex1].Description);
             }
+
+            if (deviceIndex2 != -1)
+            {
+                mainWindow.enableSyslogCheckbox.Enabled = true;
+            }
+
             openDevices.Add(deviceIndex1);
             interfaceToID[devices[deviceIndex1].Description] = 1;
+            devIndexToName[deviceIndex1] = "Interface 1";
             //portToDevIndex[1] = deviceIndex2;
            
         }
@@ -94,6 +103,14 @@ namespace PSIP_software_switch
                 interfaceToID.Remove(devices[deviceIndex2].Description);
             }
             interfaceToID[devices[deviceIndex2].Description] = 2;
+            devIndexToName[deviceIndex2] = "Interface 2";
+
+            if (deviceIndex1 != -1)
+            {
+                mainWindow.enableSyslogCheckbox.Enabled = true;
+               
+            }
+
             //portToDevIndex[2] = deviceIndex1;
             openDevices.Add(deviceIndex2);
             
@@ -131,8 +148,9 @@ namespace PSIP_software_switch
 
         private void onPacketArrivalCallBackInt1(object sender, PacketCapture e, int recvDeviceIndex, int sendDeviceIndex)
         {
+
            
-           
+
             var time = e.Header.Timeval.Date;
             var len = e.Data.Length;
             var rawPacket = e.GetPacket();
@@ -140,46 +158,59 @@ namespace PSIP_software_switch
 
 
             if (interfaceToID[devices[recvDeviceIndex].Description] == 1)
-            {
-                packetArrivalTimeDev1 = DateTime.UtcNow;
-
+            { 
                 mainWindow.Invoke((MethodInvoker)delegate {
                     // Update UI on the UI thread
                     mainWindow.interface1ConnectionLabel.ForeColor = Color.Green;
                     mainWindow.interface1ConnectionLabel.Text = "Connected";
                 });
+
+                isDisconnectedInt1 = false;
+                packetArrivalTimeDev1 = DateTime.UtcNow;
+
+                
             }
-            else
+            else if (interfaceToID[devices[recvDeviceIndex].Description] == 2)
             {
-                packetArrivalTimeDev2 = DateTime.UtcNow;
 
                 mainWindow.Invoke((MethodInvoker)delegate {
                     // Update UI on the UI thread
                     mainWindow.interface2ConnectionLabel.ForeColor = Color.Green;
                     mainWindow.interface2ConnectionLabel.Text = "Connected";
                 });
+                isDisconnectedInt2 = false;
+                packetArrivalTimeDev2 = DateTime.UtcNow;
+
+                
             }
 
 
             if (packet is EthernetPacket ethPacket)
             {
 
-                
-                lock (QueueLock)
+                if (ACL.AclAllowPacket(ethPacket, devIndexToName[recvDeviceIndex], "IN"))
                 {
-                    packets.Enqueue(new QueedPacket(recvDeviceIndex, rawPacket));
+                    lock (QueueLock)
+                    {
+                        packets.Enqueue(new QueedPacket(recvDeviceIndex, rawPacket));
 
+                    }
+                    Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
+
+                    MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
                 }
-                Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
-
-                MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
+                else
+                {
+                    Console.WriteLine("NEMOZE HAHAHAHAHHAHA");
+                }
+                
                 
 
             }
 
         }
 
-        private static void ProcessPackets(ref Queue<QueedPacket> capturedPackets, ref object QueueLockObj, ref bool shouldTermiante)
+        private void ProcessPackets(ref Queue<QueedPacket> capturedPackets, ref object QueueLockObj, ref bool shouldTermiante)
         {
             while (!shouldTermiante)
             {
@@ -218,16 +249,23 @@ namespace PSIP_software_switch
                         {
                             throw new Exception("Sending device invalid");
                         }
+
+                       
+
+                        if (!ACL.AclAllowPacket(packet.packet, devIndexToName[sendingDeviceIndex], "OUT")) 
+                        {
+                            continue;
+                        }
                         isInMac = MacTable.inMacTable(packet.packet.DestinationHardwareAddress.ToString());
                         
                         int macTablePort = MacTable.GetRecordPort(packet.packet.SourceHardwareAddress.ToString());
 
                         if (macTablePort != 0)
                         {
-                            Console.WriteLine($"SOURCE MAC ADDRESS: {packet.packet.SourceHardwareAddress} PORT: {interfaceToID[devices[packet.deviceIndex].Description]}" );
-                            Console.WriteLine($"Interface port {macTablePort}");
+                            
                             if (macTablePort != interfaceToID[devices[packet.deviceIndex].Description])
                             {
+                                Syslog.EnqueuePacket("Cabels have been swapped", Syslog.SyslogSeverity.Alert);
                                 MacTable.CableSwitch(packet.packet.SourceHardwareAddress.ToString(), 0, 0);
                                 
                                 //SwitchPortMapping();
@@ -237,7 +275,7 @@ namespace PSIP_software_switch
 
                         if (isInMac && packet.deviceIndex == sendingDeviceIndex)
                         {
-                            MacTable.updateTime(packet.packet.SourceHardwareAddress.ToString());
+                            mainWindow.macTableObj.updateTime(packet.packet.SourceHardwareAddress.ToString());
 
                             int toSend;
                             lock (MacTable.lockObject)
@@ -245,11 +283,11 @@ namespace PSIP_software_switch
                                  toSend = portToDevIndex[MacTable.macHashTable[MacTable.FormatMac(packet.packet.DestinationHardwareAddress.ToString())]];
 
                             }
-                            Console.WriteLine(MacTable.macHashTable[MacTable.FormatMac(packet.packet.DestinationHardwareAddress.ToString())]);
-                            Console.WriteLine(toSend);
+                           
                             try
                             {
-                                
+                                Statistics.updateStatsTable(packet.packet, interfaceToID[devices[sendingDeviceIndex].Description], "OUT");
+
                                 devices[toSend].SendPacket(packet.packet);
                                 //devices[sendingDeviceIndex].SendPacket(packet.packet);
 
@@ -258,16 +296,19 @@ namespace PSIP_software_switch
                             catch (Exception e) { }
 
                         }
+                        
                         else
                         {
-                            MacTable.updateTime(packet.packet.SourceHardwareAddress.ToString());
+                            //MacTable.addRow(packet.packet.SourceHardwareAddress.ToString(), interfaceToID[devices[receivingDeviceIndex].Description]);
+                            mainWindow.macTableObj.updateTime(packet.packet.SourceHardwareAddress.ToString());
                             foreach (int devInd in openDevices)
                             {
                                 if (devInd != packet.deviceIndex)
                                 {
                                     try
                                     {
-                                        
+                                        Statistics.updateStatsTable(packet.packet, interfaceToID[devices[sendingDeviceIndex].Description], "OUT");
+
                                         devices[devInd].SendPacket(packet.packet);
                                     }
                                     catch (Exception ex) { }
@@ -277,7 +318,12 @@ namespace PSIP_software_switch
                             }
                         }
 
-                        Statistics.updateStatsTable(packet.packet, interfaceToID[devices[sendingDeviceIndex].Description], "OUT");
+                        if (isInMac)
+                        {
+                            mainWindow.macTableObj.updateTime(packet.packet.SourceHardwareAddress.ToString());
+
+                        }
+
 
 
 
@@ -294,6 +340,21 @@ namespace PSIP_software_switch
             {
                 if (devices[deviceIndex1] != null && devices[deviceIndex2] != null)
                 {
+
+                    mainWindow.Invoke((MethodInvoker)delegate {
+                        // Update UI on the UI thread
+                        mainWindow.interface1ConnectionLabel.ForeColor = Color.Red;
+                        mainWindow.interface1ConnectionLabel.Text = "Disconnected";
+                    });
+
+                    mainWindow.Invoke((MethodInvoker)delegate {
+                        // Update UI on the UI thread
+                        mainWindow.interface2ConnectionLabel.ForeColor = Color.Red;
+                        mainWindow.interface2ConnectionLabel.Text = "Disconnected";
+                    });
+
+                    Syslog.EnqueuePacket("Switch is disabled", Syslog.SyslogSeverity.Informational);
+                    timer.Stop();
                     devices[deviceIndex1].StopCapture();
                     devices[deviceIndex2].StopCapture();
                     devices[deviceIndex1].Close();
@@ -313,6 +374,8 @@ namespace PSIP_software_switch
                 {
                     thredShouldTerminate = false;
                     startSniffing();
+                    Syslog.EnqueuePacket("Switch is enabled", Syslog.SyslogSeverity.Informational);
+
                 }
             }
         }
@@ -325,15 +388,24 @@ namespace PSIP_software_switch
             return packet;
         }
 
-        private struct QueedPacket
+        public struct QueedPacket
         {
             public EthernetPacket packet { get; set; }
             public int deviceIndex { get; set; }
+            public string acl { get; set; }
 
-            public QueedPacket(int deviceIndex, RawCapture packet)
+            public QueedPacket(int deviceIndex, RawCapture packet, string acl =  "")
             {
                 this.deviceIndex = deviceIndex;
                 this.packet = (EthernetPacket)Packet.ParsePacket(packet.LinkLayerType, packet.Data);
+                this.acl = acl;
+            }
+
+            public QueedPacket(int deviceIndex, EthernetPacket syslogPacket, string acl = "acl")
+            {
+                this.deviceIndex = deviceIndex;
+                this.packet = (EthernetPacket)syslogPacket;
+                this.acl = acl;
             }
         }
 
@@ -345,57 +417,49 @@ namespace PSIP_software_switch
             DateTime currentTime = DateTime.UtcNow;
             double dev1TimeDifference = (currentTime - packetArrivalTimeDev1).TotalSeconds ;
             double dev2TimeDifference = (currentTime - packetArrivalTimeDev2).TotalSeconds;
-            Console.WriteLine(dev1TimeDifference);
-            Console.WriteLine(currentTime);
-            Console.WriteLine(packetArrivalTimeDev1);
-            Console.WriteLine($"TIME: {disconnectTime}");
-            if (dev1TimeDifference > disconnectTime)
+            
+            if (dev1TimeDifference > disconnectTime && !isDisconnectedInt1)
             {
+                Syslog.EnqueuePacket("Interface 1 has been disconnect", Syslog.SyslogSeverity.Warning);
                 //devices[deviceIndex1].StopCapture();
                 //devices[deviceIndex1].Close();
                 mainWindow.interface1ConnectionLabel.ForeColor = Color.Red;
                 mainWindow.interface1ConnectionLabel.Text = "Disconnected";
+                isDisconnectedInt1 = true;
                 MacTable.DeleteSpecificRecords(1);
-                Console.WriteLine("Timeout");
+               
 
             }
-            if (dev2TimeDifference > disconnectTime)
+            if (dev2TimeDifference > disconnectTime && !isDisconnectedInt2)
             {
+                Syslog.EnqueuePacket("Interface 2 has been disconnect", Syslog.SyslogSeverity.Warning);
+
                 //devices[deviceIndex2].StopCapture();
                 //devices[deviceIndex2].Close();
                 mainWindow.interface2ConnectionLabel.ForeColor = Color.Red;
                 mainWindow.interface2ConnectionLabel.Text = "Disconnected";
+                isDisconnectedInt2 = true;
                 MacTable.DeleteSpecificRecords(2);
-                Console.WriteLine("Timeout");
-                Console.WriteLine("TU JE DRUHY INTERFACE");
+                
             }
 
             // Wait for the specified interval before checking again
             
         }
 
-        public static void SwitchPortMapping()
+        public static ILiveDevice SyslogSenderDevice()
         {
-            Console.WriteLine("LEKS");
-            foreach (string key in interfaceToID.Keys)
+            ILiveDevice senderDevice = null;
+            if (mainWindow.interface1RadioButton.Checked)
             {
-                Console.WriteLine(interfaceToID[key]);
+                senderDevice = devices[deviceIndex1];
+            }
+            else if (mainWindow.interface2RadioButton.Checked)
+            {
+                senderDevice = devices[deviceIndex2];
             }
 
-            int swappedPort1 = interfaceToID[devices[deviceIndex1].Description] == 1 ? 2 : 1;
-            int swappedPort2 = interfaceToID[devices[deviceIndex2].Description] == 2 ? 1 : 2;
-
-            interfaceToID[devices[deviceIndex1].Description] = swappedPort1;
-            interfaceToID[devices[deviceIndex2].Description] = swappedPort2;
-
-            Console.WriteLine("KEKS");
-            foreach (string key in interfaceToID.Keys)
-            {
-                Console.WriteLine(interfaceToID[key]);
-            }
-
-         
-
+            return senderDevice;
         }
 
         public void SetDisconnectTime(int newTime)

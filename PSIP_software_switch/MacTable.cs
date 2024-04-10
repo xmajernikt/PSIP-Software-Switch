@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace PSIP_software_switch
 {
-    internal class MacTable
+    public class MacTable
     {
         public static Dictionary<string, int> macHashTable = new Dictionary<string, int>();
         private static Dictionary<string, int> macToTime = new Dictionary<string, int>();
@@ -54,38 +54,58 @@ namespace PSIP_software_switch
                 try
                 {
                     List<DataRow> rowsToDelete = new List<DataRow>();
+                    List<string> macsToDelete = new List<string>();
                     foreach (DataRow row in macTable.Rows)
                     {
                         int time = Convert.ToInt32(row["TIME"]);
                         if (time > 0)
                         {
-                            row["TIME"] = time - 1;
+                            if (row["TIME"] != null)
+                            {
+                                row["TIME"] = time - 1;
+
+                            }
                         }
                         else if (time == 0)
                         {
                             // Delete the row if time is zero
+                            Syslog.EnqueuePacket($"A record with MAC address {row["MAC"]} has been deleted.", Syslog.SyslogSeverity.Warning);
                             rowsToDelete.Add(row);
+                            macsToDelete.Add((string)row["MAC"]);
+
                             //break; // Exit the loop after removing the row
                         }
 
                         if (ShouldDeleteRecord((string)row["MAC"]))
                         {
                             rowsToDelete.Add(row);
+                            macsToDelete.Add((string)row["MAC"]);
+
                         }
                     }
 
+                    //foreach (string mac in macsToDelete)
+                    //{
+                    //    macHashTable.Remove(mac);
+                    //    macToTime.Remove(mac);
+                    //}
                     foreach (DataRow row in rowsToDelete)
                     {
+                        
                         macHashTable.Remove(Convert.ToString(row["MAC"]));
                         macToTime.Remove(Convert.ToString(row["MAC"]));
                         macTable.Rows.Remove(row);
 
                     }
-                    mainWindow.Invoke((MethodInvoker)delegate
-                    {
-                        mainWindow.macTable.DataSource = macTable; // Update the data source after adding the row
-                        mainWindow.macTable.Refresh(); // Refresh the DataGridView to reflect the changes
-                    });
+
+                    //rowsToDelete.Clear();
+                    macsToDelete.Clear();
+                    mainWindow.macTable.Refresh();
+                    //mainWindow.Invoke((MethodInvoker)delegate
+                    //{
+                    //    //mainWindow.macTable.DataSource = macTable;
+                    //    mainWindow.macTable.Refresh(); // Refresh the DataGridView to reflect the changes
+                    //});
                 }
                 catch { }
 
@@ -120,7 +140,7 @@ namespace PSIP_software_switch
         {
             if (!inMacTable(macAddress) && !IsForbbiden(macAddress))
             {
-
+                Syslog.EnqueuePacket($"A new record with mac address {FormatMac(macAddress)} has been added", Syslog.SyslogSeverity.Informational);
                 DataRow newRow = macTable.NewRow();
                 macHashTable.Add(FormatMac(macAddress), portIndex);
                 macToTime.Add(FormatMac(macAddress), macRecordTimer);
@@ -172,60 +192,69 @@ namespace PSIP_software_switch
 
         public static bool inMacTable(string macAddress)
         {
-            Console.WriteLine(FormatMac(macAddress));
             if (FormatMac(macAddress).Equals("FF-FF-FF-FF-FF-FF"))
             {
-                Console.WriteLine("BROADCAST");
                 return false;
             }
 
             if (!macHashTable.ContainsKey(FormatMac(macAddress)))
             {
-                Console.Write("NENI TAM: ");
-                Console.WriteLine(FormatMac(macAddress));
+                
                 return false;
             }
             return true;
         }
 
-        public static void updateTime(string srcMacAddress)
+        public void updateTime(string srcMacAddress)
         {
             if (macTable.Rows != null)
             {
 
                 foreach (DataRow row in macTable.Rows)
                 {
-                    if (row["MAC"].Equals(FormatMac(srcMacAddress)))
+                    if (row.RowState != DataRowState.Deleted)
                     {
-                        try
+                        if (row["MAC"].Equals(FormatMac(srcMacAddress)))
                         {
-                            row["TIME"] = macRecordTimer;
+                            try
+                            {
+                               
+                                macToTime[FormatMac(srcMacAddress)] = macRecordTimer;
+                                row["TIME"] = macRecordTimer;
+                                break;
+
+                                
+
+
+
+                            }
+                            catch (Exception e) { }
+
+
 
                         }
-                        catch (Exception e) { }
-
-
-
-                        macToTime[FormatMac(srcMacAddress)] = macRecordTimer;
-                        break;
                     }
+                    
                 }
 
             }
         }
 
-        private static bool ShouldDeleteRecord(string srcMacAddress)
+        private bool ShouldDeleteRecord(string srcMacAddress)
         {
             int time = 0;
             foreach (DataRow row in macTable.Rows)
-            {
-                time = (int)row["TIME"];
-                //Console.WriteLine($"Difference: {macToTime[srcMacAddress] - time} For mac address: {srcMacAddress}");
-                //Console.WriteLine($"Timer: {macRecordTimer}");
-                if (macToTime[srcMacAddress] - time > macRecordTimer)
+            {   
+                if (row["MAC"].Equals(srcMacAddress))
                 {
-                    return true;
+                    time = (int)row["TIME"];
+                    if (macToTime[srcMacAddress] - time >= macRecordTimer)
+                    {
+                        
+                        return true;
+                    }
                 }
+
             }
             return false;
         }
@@ -234,7 +263,6 @@ namespace PSIP_software_switch
         {
             macRecordTimer = newTime;
             oldMacRecordTimer = macRecordTimer;
-            Console.WriteLine(macRecordTimer);
         }
 
         public static void CableSwitch(string macAddress, int recvIndex, int sendIndex)
@@ -259,7 +287,6 @@ namespace PSIP_software_switch
                 {   
                     
                     int swappedPort = macHashTable[FormatMac(macAddress)] == 1 ? 2 : 1;
-                    Console.WriteLine($"MAC ADDRESS: {FormatMac(macAddress)}    PORT: {swappedPort}");
 
                     macHashTable[FormatMac(macAddress)] = swappedPort;
 

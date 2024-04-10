@@ -68,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ACL.cs" />
+    <Compile Include="AclContainer.cs" />
     <Compile Include="AclFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +88,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Syslog.cs" />
     <EmbeddedResource Include="AclFilterForm.resx">
       <DependentUpon>AclFilterForm.cs</DependentUpon>
     </EmbeddedResource>
