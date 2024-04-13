@@ -198,13 +198,7 @@ namespace PSIP_software_switch
                     Statistics.updateStatsTable(ethPacket, interfaceToID[devices[recvDeviceIndex].Description], "IN");
 
                     MacTable.addRow(ethPacket.SourceHardwareAddress.ToString(), interfaceToID[devices[recvDeviceIndex].Description]);
-                }
-                else
-                {
-                    Console.WriteLine("NEMOZE HAHAHAHAHHAHA");
-                }
-                
-                
+                }        
 
             }
 

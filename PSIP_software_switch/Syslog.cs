@@ -43,25 +43,22 @@ namespace PSIP_software_switch
             string timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffK");
             string hostName = Environment.MachineName;
             string appName = "Switch"; // Change this to your application name
-            string procId = "12345"; // Change this to your process ID
+            string procId = "12345"; 
             string msgId = "-";
             string structuredData = "-";
             string data = $"<{((int)severity)}>1 {timestamp} {hostName} {appName} {procId} {msgId} [{structuredData}] {message}";
 
-            // Creating UDP packet
             var udpPacket = new UdpPacket(0, serverPort)
             {
                 PayloadData = Encoding.UTF8.GetBytes(data)
             };
 
-            // Creating IP packet
             var ipPacket = new IPv4Packet(clientIp, serverIp)
             {
                 Protocol = PacketDotNet.ProtocolType.Udp,
                 PayloadPacket = udpPacket
             };
             Console.WriteLine(sender);
-            // Creating Ethernet packet
             var ethPacket = new EthernetPacket(sender.MacAddress, serverMac, EthernetType.IPv4)
             {
                 PayloadPacket = ipPacket
@@ -87,11 +84,7 @@ namespace PSIP_software_switch
                 }
             }
            
-            //Sniffer.QueedPacket sysLogPacket = new Sniffer.QueedPacket(devIndex, BuildSyslogPacket(message, syslogSeverity)); 
-            //lock (Sniffer.QueueLock)
-            //{
-            //    Sniffer.packets.Enqueue(sysLogPacket);
-            //}
+          
         }
 
         public enum SyslogSeverity
